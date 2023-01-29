@@ -40,7 +40,7 @@ jobs:
           path: build/jar
 
       - name: Print console message on failure
-        if: ${{ steps.build.conclusion == 'success' && steps.lookupforjar.conclusion == 'failure'}}
+        if: ${{ steps.build.conclusion == 'success' }}
         run: |
-          echo "Build failed"
+          echo "Build succeeded but smth failed"
         shell: bash
