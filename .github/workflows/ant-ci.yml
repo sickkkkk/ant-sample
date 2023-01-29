@@ -22,7 +22,7 @@ jobs:
       - name: Build ANT Project
         id: build
         run: |
-          ant -noinput -buildfile 1build.xml
+          ant -noinput -buildfile build.xml
         shell: bash
       
       - name: Check GITHUB_WORKSPACE Folder for build output
@@ -40,8 +40,8 @@ jobs:
           name: Package
           path: build/jar
 
-      - name: Print console message on failure
-        if: failure()
+      - name: Print console message
+        if: always()
         run: |
           echo ${{ steps.build.conclusion }}
           echo ${{ steps.lookupforjar.conclusion }}
