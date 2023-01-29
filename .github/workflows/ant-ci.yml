@@ -20,12 +20,20 @@ jobs:
           java-version: '8'
 
       - name: Build ANT Project
+        id: build
         run: |
-          ant -noinput -buildfile build.xml
+          ant -noinput -buildfile 1build.xml
         shell: bash
       
       - name: Check GITHUB_WORKSPACE Folder for build output
-        if: success()
+        if: always()
         run: |
           ls -ltR $GITHUB_WORKSPACE | grep .jar
         shell: bash
+
+      - name: Upload artifact
+        if: ${{ steps.build.conclusion == 'success' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: Package
+          path: build/jar
