@@ -1,0 +1,31 @@
+name: ant-ci
+on: 
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+jobs:
+
+  setup-java-ant-env:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code to repo
+        uses: actions/checkout@v3
+
+      - name: Setup JDK1.8 Corretto  
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'corretto'
+          java-version: '8'
+
+      - name: Build ANT Project
+        run: |
+          ant -noinput -buildfile build.xml
+        shell: bash
+      
+      - name: Check GITHUB_WORKSPACE Folder for build output
+        if: success()
+        run: |
+          ls -la $GITHUB_WORKSPACE | grep .jar
+        shell: bash
