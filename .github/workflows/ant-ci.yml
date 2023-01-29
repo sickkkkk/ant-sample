@@ -22,14 +22,14 @@ jobs:
       - name: Build ANT Project
         id: build
         run: |
-          ant -noinput -buildfile 1build.xml
+          ant -noinput -buildfile build.xml
         shell: bash
       
       - name: Check GITHUB_WORKSPACE Folder for build output
-        id: check
+        id: lookupforjar
         if: always()
         run: |
-          ls -ltR $GITHUB_WORKSPACE | grep .jar
+          ls -la $GITHUB_WORKSPACE | grep .jar
         shell: bash
 
       - name: Upload artifact
@@ -40,7 +40,7 @@ jobs:
           path: build/jar
 
       - name: Print console message on failure
-        if: ${{ steps.build.conclusion == 'failure' &&  steps.check.conclusion == 'failure'}}
+        if: ${{ steps.build.conclusion == 'success' && steps.lookupforjar.conclusion == 'failure'}}
         run: |
           echo "Build failed"
         shell: bash
