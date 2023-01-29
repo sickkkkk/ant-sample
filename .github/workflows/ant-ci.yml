@@ -27,7 +27,7 @@ jobs:
       
       - name: Check GITHUB_WORKSPACE Folder for build output
         id: lookupforjar
-        if: always()
+        if: steps.build.conclusion == 'success' 
         run: |
           ls -la $GITHUB_WORKSPACE | grep .jar
         shell: bash
@@ -40,7 +40,7 @@ jobs:
           path: build/jar
 
       - name: Print console message on failure
-        if: ${{ steps.build.conclusion == 'success' }}
+        if: ${{ steps.lookupforjar.conclusion == 'failure' }}
         run: |
-          echo "Build succeeded but smth failed"
+          echo "Build failed"
         shell: bash
