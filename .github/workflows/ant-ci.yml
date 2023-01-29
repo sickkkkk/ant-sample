@@ -26,6 +26,7 @@ jobs:
         shell: bash
       
       - name: Check GITHUB_WORKSPACE Folder for build output
+        id: check
         if: always()
         run: |
           ls -ltR $GITHUB_WORKSPACE | grep .jar
@@ -37,3 +38,9 @@ jobs:
         with:
           name: Package
           path: build/jar
+
+      - name: Print console message on failure
+        if: ${{ steps.build.conclusion == 'failure' &&  steps.check.conclusion == 'failure'}}
+        run: |
+          echo "Build failed"
+        shell: bash
