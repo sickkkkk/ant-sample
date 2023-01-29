@@ -27,12 +27,13 @@ jobs:
       
       - name: Check GITHUB_WORKSPACE Folder for build output
         id: lookupforjar
-        if: steps.build.conclusion == 'success' 
+        if: ${{ steps.build.conclusion == 'success' }}
         run: |
           ls -la $GITHUB_WORKSPACE | grep .jar
         shell: bash
 
       - name: Upload artifact
+        id: upload
         if: ${{ steps.build.conclusion == 'success' }}
         uses: actions/upload-artifact@v3
         with:
@@ -40,7 +41,9 @@ jobs:
           path: build/jar
 
       - name: Print console message on failure
-        if: ${{ steps.lookupforjar.conclusion == 'failure' }}
+        if: failure()
         run: |
-          echo "Build failed"
+          echo ${{ steps.build.conclusion }}
+          echo ${{ steps.lookupforjar.conclusion }}
+          echo ${{ steps.upload.conclusion }}
         shell: bash
