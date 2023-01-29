@@ -27,5 +27,5 @@ jobs:
       - name: Check GITHUB_WORKSPACE Folder for build output
         if: success()
         run: |
-          ls -la $GITHUB_WORKSPACE | grep .jar
+          ls -ltr $GITHUB_WORKSPACE
         shell: bash
