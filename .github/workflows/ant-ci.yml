@@ -22,19 +22,19 @@ jobs:
       - name: Build ANT Project
         id: build
         run: |
-          ant -noinput -buildfile build.xml
+          ant -noinput -buildfile 1build.xml
         shell: bash
       
       - name: Check GITHUB_WORKSPACE Folder for build output
         id: lookupforjar
         if: ${{ steps.build.conclusion == 'success' }}
         run: |
-          ls -la $GITHUB_WORKSPACE | grep .jar
+          ls -ltR $GITHUB_WORKSPACE
         shell: bash
 
       - name: Upload artifact
         id: upload
-        if: ${{ steps.build.conclusion == 'success' }}
+        if: ${{ steps.build.conclusion == 'success' && steps.lookupforjar.conclusion == 'success'}}
         uses: actions/upload-artifact@v3
         with:
           name: Package
